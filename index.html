@@ -1,7 +1,8 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat + Shred App</title>
 
 <style>
@@ -15,10 +16,12 @@ body {
     height: 100vh;
 }
 
-/* Phone UI */
+/* Responsive Phone */
 .phone {
-    width: 320px;
-    height: 600px;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 700px;
     background: white;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
@@ -32,29 +35,33 @@ body {
 .header {
     background: #2c2f36;
     color: white;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
+    font-size: 16px;
 }
 
-/* Chat Area */
+/* Chat */
 .chat-box {
     flex: 1;
     padding: 10px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
     background: #e0e0e0;
-    padding: 8px 12px;
+    padding: 10px;
     margin: 5px 0;
     border-radius: 10px;
-    width: fit-content;
+    max-width: 70%;
+    word-wrap: break-word;
 }
 
 .me {
     background: #2c2f36;
     color: white;
-    margin-left: auto;
+    align-self: flex-end;
 }
 
 /* Input */
@@ -66,12 +73,13 @@ body {
 
 input {
     flex: 1;
-    padding: 8px;
+    padding: 10px;
+    font-size: 14px;
 }
 
 button {
     margin-left: 5px;
-    padding: 8px 10px;
+    padding: 10px;
     background: #2c2f36;
     color: white;
     border: none;
@@ -123,6 +131,15 @@ button {
     50% { height: 10px; }
     100% { height: 40px; }
 }
+
+/* Mobile full screen */
+@media (max-width: 500px) {
+    .phone {
+        border-radius: 0;
+        height: 100vh;
+        max-height: none;
+    }
+}
 </style>
 </head>
 
@@ -132,17 +149,14 @@ button {
 
     <div class="header">Secure Chat</div>
 
-    <!-- Chat messages -->
     <div class="chat-box" id="chatBox"></div>
 
-    <!-- Input -->
     <div class="input-area">
         <input type="text" id="msg" placeholder="Type message...">
         <button onclick="sendMsg()">Send</button>
         <button onclick="startShred()">Exit</button>
     </div>
 
-    <!-- Shred Overlay -->
     <div class="overlay" id="overlay">
         <div class="box">Shredding Chats...</div>
         <div class="shred">
@@ -154,8 +168,16 @@ button {
 </div>
 
 <script>
+const input = document.getElementById("msg");
+
+/* ENTER KEY SUPPORT */
+input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMsg();
+    }
+});
+
 function sendMsg() {
-    const input = document.getElementById("msg");
     const text = input.value.trim();
     if (!text) return;
 
@@ -178,7 +200,7 @@ function startShred() {
     overlay.style.display = "flex";
 
     setTimeout(() => {
-        chatBox.innerHTML = ""; // CLEAR CHAT 🔥
+        chatBox.innerHTML = "";
         overlay.style.display = "none";
         alert("All chats shredded!");
     }, 3000);
